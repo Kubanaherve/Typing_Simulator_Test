@@ -47,3 +47,27 @@ if (activeForm) {
   });
 }
 
+import { UIRenderer } from './ui.js';
+import { calculateDashboardMetrics, enforceBudgetCap } from './stats.js';
+
+// Listens to global state alerts to automatically drive core UI syncs
+window.addEventListener('statechanged', () => {
+  const currentRecords = AppState.getSortedRecords();
+  
+  // Refreshes the display view records table canvas
+  UIRenderer.renderTable(currentRecords, AppState.filters.searchPattern);
+  
+  // Re-evaluates mathematical calculations and budget warnings
+  const metrics = calculateDashboardMetrics(AppState.records);
+  enforceBudgetCap(metrics.runningSum, AppState.settings.budgetCap);
+});
+
+// Triggers an initial lifecycle render block when document threads spin up
+document.addEventListener('DOMContentLoaded', () => {
+  const baselineRecords = StorageEngine.loadRecords();
+  if (baselineRecords.length > 0) {
+    AppState.setRecords(baselineRecords);
+  }
+});
+
+
