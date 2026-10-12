@@ -11,7 +11,7 @@ export const VALIDATION_RULES = {
 };
 
 
-// Storage keys and core serialization layers for data persistence
+
 const STORAGE_KEY = 'app:finance:records';
 const SETTINGS_KEY = 'app:finance:settings';
 
@@ -33,7 +33,7 @@ export function validateTransaction(data) {
   if (!VALIDATION_RULES.amount.test(data.amount)) return "Amount must be valid currency format.";
   if (!VALIDATION_RULES.date.test(data.date)) return "Date must match format YYYY-MM-DD.";
   if (!ADVANCED_RULES.category.test(data.category)) return "Category contains forbidden tokens.";
-  return null; // Passes all constraints cleanly
+  return null; 
 }
 
 
